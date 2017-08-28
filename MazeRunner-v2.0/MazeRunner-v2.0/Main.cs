@@ -10,9 +10,19 @@ namespace MazeRunner_v2._0
             InitializeComponent();
 
         }
+        
 
         private void btn_upload_Click(object sender, EventArgs e)
         {
+            OpenFileDialog openFileDialog = new OpenFileDialog();
+            if (openFileDialog.ShowDialog() == DialogResult.OK)
+            {
+                try
+                {
+
+                }
+            }
+            
             // Find image
         }
 
