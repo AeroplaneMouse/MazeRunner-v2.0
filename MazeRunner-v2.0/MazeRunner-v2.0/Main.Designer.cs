@@ -39,9 +39,10 @@
             // 
             // btn_load
             // 
-            this.btn_load.Location = new System.Drawing.Point(12, 41);
+            this.btn_load.Location = new System.Drawing.Point(8, 27);
+            this.btn_load.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.btn_load.Name = "btn_load";
-            this.btn_load.Size = new System.Drawing.Size(214, 68);
+            this.btn_load.Size = new System.Drawing.Size(143, 44);
             this.btn_load.TabIndex = 0;
             this.btn_load.Text = "Load";
             this.btn_load.UseVisualStyleBackColor = true;
@@ -49,9 +50,10 @@
             // 
             // btn_solve
             // 
-            this.btn_solve.Location = new System.Drawing.Point(232, 41);
+            this.btn_solve.Location = new System.Drawing.Point(155, 27);
+            this.btn_solve.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.btn_solve.Name = "btn_solve";
-            this.btn_solve.Size = new System.Drawing.Size(214, 68);
+            this.btn_solve.Size = new System.Drawing.Size(143, 44);
             this.btn_solve.TabIndex = 1;
             this.btn_solve.Text = "Solve";
             this.btn_solve.UseVisualStyleBackColor = true;
@@ -59,44 +61,50 @@
             // 
             // progressBar1
             // 
-            this.progressBar1.Location = new System.Drawing.Point(12, 12);
+            this.progressBar1.Location = new System.Drawing.Point(8, 8);
+            this.progressBar1.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.progressBar1.Name = "progressBar1";
-            this.progressBar1.Size = new System.Drawing.Size(954, 23);
+            this.progressBar1.Size = new System.Drawing.Size(636, 15);
             this.progressBar1.TabIndex = 2;
             // 
             // txt_x
             // 
-            this.txt_x.Location = new System.Drawing.Point(12, 139);
+            this.txt_x.Location = new System.Drawing.Point(8, 90);
+            this.txt_x.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.txt_x.Name = "txt_x";
-            this.txt_x.Size = new System.Drawing.Size(81, 26);
+            this.txt_x.Size = new System.Drawing.Size(55, 20);
             this.txt_x.TabIndex = 3;
             // 
             // txt_y
             // 
-            this.txt_y.Location = new System.Drawing.Point(12, 171);
+            this.txt_y.Location = new System.Drawing.Point(8, 111);
+            this.txt_y.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.txt_y.Name = "txt_y";
-            this.txt_y.Size = new System.Drawing.Size(81, 26);
+            this.txt_y.Size = new System.Drawing.Size(55, 20);
             this.txt_y.TabIndex = 4;
             // 
             // pictureBox
             // 
-            this.pictureBox.Location = new System.Drawing.Point(12, 203);
+            this.pictureBox.Location = new System.Drawing.Point(8, 132);
+            this.pictureBox.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.pictureBox.Name = "pictureBox";
-            this.pictureBox.Size = new System.Drawing.Size(954, 729);
+            this.pictureBox.Size = new System.Drawing.Size(636, 474);
+            this.pictureBox.SizeMode = System.Windows.Forms.PictureBoxSizeMode.AutoSize;
             this.pictureBox.TabIndex = 5;
             this.pictureBox.TabStop = false;
             // 
             // Main
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(978, 944);
+            this.ClientSize = new System.Drawing.Size(652, 614);
             this.Controls.Add(this.pictureBox);
             this.Controls.Add(this.txt_y);
             this.Controls.Add(this.txt_x);
             this.Controls.Add(this.progressBar1);
             this.Controls.Add(this.btn_solve);
             this.Controls.Add(this.btn_load);
+            this.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.Name = "Main";
             this.Text = "Maze Runner v2.0";
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox)).EndInit();

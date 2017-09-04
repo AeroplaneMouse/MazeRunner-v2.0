@@ -11,6 +11,7 @@ namespace MazeRunner_v2._0
         private int height = 0;
         private Bitmap maze;
         private int[] startPos = { 0, 0 };
+        private byte orientation = 0;
 
         public Main()
         {
@@ -23,7 +24,7 @@ namespace MazeRunner_v2._0
             OpenFileDialog openFileDialog = new OpenFileDialog();
             if (openFileDialog.ShowDialog() == DialogResult.OK)
             {
-                bool succed = true;
+                bool succeeded = true;
                 try
                 {
                     maze = (Bitmap)Image.FromFile(openFileDialog.FileName);
@@ -32,26 +33,39 @@ namespace MazeRunner_v2._0
                 }
                 catch (Exception)
                 {
-                    succed = false;
-                    MessageBox.Show("Error");
+                    succeeded = false;
+                    MessageBox.Show("Error loading maze!", "Error");
                 }
-                if (succed)
+                if (succeeded)
                 {
-                    startPos = findOpeningOnSide(1, new int[] { 0, 0 });
                     pictureBox.Image = maze;
+                    if (width >= height)
+                    {
+                        //pictureBox.Scale(pictureBox.Size.Width / width);
+                        Scale(pictureBox.Size.Width / width);
+                    }
+                    startPos = findOpeningOnSide(1, new int[] { 0, 0 });
                     if (startPos == new int[] { 0, 0 })
                     {
-                        MessageBox.Show("Could not find start and end!", "Error");
-                        return;
+                        startPos = findOpeningOnSide(0, new int[] { 0, 0 });
+                        if (startPos == new int[] { 0, 0 })
+                        {
+                            MessageBox.Show("Could not find start and end!", "Error");
+                            return;
+                        }
+                        else
+                        {
+                            orientation = 0;
+                            MessageBox.Show("Maze loaded correctly.");
+                        }
                     }
                     else
                     {
-                        MessageBox.Show("Image loaded correctly.");
+                        orientation = 1;
+                        MessageBox.Show("Maze loaded correctly.");
                     }
                 }
             }
-            
-            // Find image
         }
 
         private int[] findOpeningOnSide(int orientation, int[] startSidePos)
