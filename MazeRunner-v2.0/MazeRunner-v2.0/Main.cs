@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Drawing;
+using System.Collections;
 using System.Windows.Forms;
 
 namespace MazeRunner_v2._0
@@ -11,12 +12,12 @@ namespace MazeRunner_v2._0
         private int height = 0;
         private Bitmap maze;
         private int[] startPos = { 0, 0 };
+        private ArrayList nodes = new ArrayList();
 
         public Main()
         {
             InitializeComponent();
         }
-        
 
         private void btn_load_Click(object sender, EventArgs e)
         {
@@ -39,6 +40,7 @@ namespace MazeRunner_v2._0
                 {
                     startPos = findOpeningOnSide(1, new int[] { 0, 0 });
                     pictureBox.Image = maze;
+
                     if (startPos == new int[] { 0, 0 })
                     {
                         MessageBox.Show("Could not find start and end!", "Error");
