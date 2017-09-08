@@ -1,17 +1,29 @@
 ﻿using System;
 using System.Drawing;
+using System.Collections;
 using System.Windows.Forms;
 
 namespace MazeRunner_v2._0
 {
     public partial class Main : Form
     {
+        /* Array information:
+         * 0 = not visited
+         * 1 = 
+         * 
+         * 
+         * 
+         * 
+         */
+
+
         private int[,] array = new int[1000,1000];
         private int width = 0;
         private int height = 0;
         private Bitmap maze;
         private int[] startPos = { 0, 0 };
         private byte orientation = 0;
+        private ArrayList nodes = new ArrayList();
 
         public Main()
         {
@@ -118,15 +130,12 @@ namespace MazeRunner_v2._0
 
         private void btn_solve_Click(object sender, EventArgs e)
         {
-            int x = Convert.ToInt32(txt_x.Text);
-            int y = Convert.ToInt32(txt_y.Text);
-            Bitmap image = (Bitmap)Image.FromFile(@"C:\Users\danie\GitHub\MazeRunner-v2.0\maze.png", true);
-            Color pixelColor = image.GetPixel(x, y);
+            if (startPos != new int[] { 0,0})
+            {
 
-            int r = pixelColor.R;
-            int g = pixelColor.G;
-            int b = pixelColor.B;
-            MessageBox.Show(r + ":" + g + ":" + b);
+            }
+
+            
 
 
 
@@ -136,6 +145,26 @@ namespace MazeRunner_v2._0
             // Create new image with shortest path
             // Message "Maze solved" 
 
+        }
+
+        private void addNodesAround(int[] pos)
+        {
+            int x = pos[0];
+            int y = pos[1];
+
+            // Adding node over.
+            if (y > 0)
+            {
+                if (array[x,y] != )
+            }
+
+            // Adding node under.
+
+
+            // Adding node right
+
+
+            // Adding node left.
         }
     }
 }
