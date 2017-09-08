@@ -9,27 +9,29 @@ namespace MazeRunner_v2._0
     {
         /* Array information:
          * 0 = not visited
-         * 1 = 
-         * 
-         * 
-         * 
+         * 1 = visited from field above
+         * 2 = visited from field below
+         * 3 = visited from field left
+         * 4 = visited from field right
          * 
          */
 
 
-        private int[,] array = new int[1000,1000];
+        private int[,] array = new int[20, 20];
         private int width = 0;
         private int height = 0;
         private Bitmap maze;
         private int[] startPos = { 0, 0 };
+        private int[] endPos = { 0, 0 };
         private byte orientation = 0;
         private ArrayList nodes = new ArrayList();
 
         public Main()
         {
             InitializeComponent();
+            //nodes.Add(1);
         }
-        
+
         private void btn_load_Click(object sender, EventArgs e)
         {
             OpenFileDialog openFileDialog = new OpenFileDialog();
@@ -50,11 +52,16 @@ namespace MazeRunner_v2._0
                 if (succeeded)
                 {
                     pictureBox.Image = maze;
-                    
-                    startPos = findOpeningOnSide(1, new int[] { 0, 0 });
+                    int[][] openings = findOpeningOnSides(1);
+                    startPos = openings[0];
+                    endPos = openings[1];
+
                     if (startPos == new int[] { 0, 0 })
                     {
-                        startPos = findOpeningOnSide(0, new int[] { 0, 0 });
+                        openings = findOpeningOnSides(0);
+                        startPos = openings[0];
+                        endPos = openings[1];
+
                         if (startPos == new int[] { 0, 0 })
                         {
                             MessageBox.Show("Could not find start and end!", "Error");
@@ -75,67 +82,39 @@ namespace MazeRunner_v2._0
             }
         }
 
-        private int[] findOpeningOnSide(int orientation, int[] startSidePos)
+        private void btn_solve_Click(object sender, EventArgs e)
         {
-            // Vertical orientation = 1
-            // Horiansontal orientation = 0
-            int whiteCounter = 0;
-            bool whiteHasStarted = false;
-            int[] whiteStartPos = { startSidePos[0], 0 };
-
-            if (orientation == 1)
+            if (startPos != new int[] { 0, 0 })
             {
-                for (int y = 0; y < height; y++)
+                if (!addNodesAround(startPos)) return;
+                int i = 0;
+                while (true)
                 {
-                    if (getColor(startSidePos[0], y) == 1)
+                    try
                     {
-                        if (!whiteHasStarted) whiteStartPos[1] = y;
-                        array[startSidePos[0], y] = 1;
-                        whiteCounter++;
-                        whiteHasStarted = true;
+                        if (!addNodesAround(nodes[i] as int[])) return;
                     }
-                    else if (whiteHasStarted) break;
+                    catch (Exception)
+                    {
+                        MessageBox.Show("Arraylist - out of range.", "Error");
+                        return;
+                    }
+
+                    if ((nodes as ArrayList)[i] == endPos)
+                    {
+                        MessageBox.Show("Maze solved!");
+                        break;
+                    }
+                    i++;
                 }
-                // Returning starting position for maze.
-                if (whiteHasStarted && (whiteCounter == 1 || whiteCounter == 2)) return whiteStartPos;
-                else if (whiteHasStarted && whiteCounter > 2) return new int[] { startSidePos[0], (whiteCounter / 2 + whiteStartPos[1]) };
-                else return new int[] { 0, 0 };
             }
             else
             {
-                for (int x = 0; x < width; x++)
-                {
-                    if (getColor(x, startSidePos[1]) == 1)
-                    {
-                        if (!whiteHasStarted) whiteStartPos[0] = x;
-                        array[x, startSidePos[1]] = 1;
-                        whiteCounter++;
-                        whiteHasStarted = true;
-                    }
-                    else if (whiteHasStarted) break;
-                }
-                // Returning starting position for maze.
-                if (whiteHasStarted && (whiteCounter == 1 || whiteCounter == 2)) return whiteStartPos;
-                else if (whiteHasStarted && whiteCounter > 2) return new int[] { (whiteCounter / 2 + whiteStartPos[0]), startSidePos[1] };
-                else return new int[] { 0, 0 };
-            }
-        }
-
-        private int getColor(int x, int y)
-        {
-            Color color = maze.GetPixel(x,y);
-            if (color.R < 10 && color.G < 10 && color.B < 10) return 0;
-            else return 1;
-        }
-
-        private void btn_solve_Click(object sender, EventArgs e)
-        {
-            if (startPos != new int[] { 0,0})
-            {
-
+                MessageBox.Show("Invalid start position. (0,0)", "Error");
+                return;
             }
 
-            
+
 
 
 
@@ -147,24 +126,171 @@ namespace MazeRunner_v2._0
 
         }
 
-        private void addNodesAround(int[] pos)
+        private void btn_test_Click(object sender, EventArgs e)
         {
-            int x = pos[0];
-            int y = pos[1];
+            int x = Convert.ToInt32(txt_x.Text);
+            int y = Convert.ToInt32(txt_y.Text);
 
-            // Adding node over.
-            if (y > 0)
+            txt_test.Text = Convert.ToString(getColor(x, y));
+        }
+
+
+        private int[][] findOpeningOnSides(int orientation)
+        {
+            /* 
+             * Vertical orientation = 1
+             * Horizontal orientation = 0
+             */
+
+            int whiteCounter = 0;
+            bool whiteHasStarted = false;
+            int[] whiteStartPos = { 0, 0 };
+            int[] whiteEndPos = { 0, 0 };
+
+            if (orientation == 1)
             {
-                if (array[x,y] != )
+                // Finding start position.
+                for (int y = 0; y < height; y++)
+                {
+                    if (getColor(0, y) == 1)
+                    {
+                        if (!whiteHasStarted) whiteStartPos[1] = y;
+                        array[0, y] = 1;
+                        whiteCounter++;
+                        whiteHasStarted = true;
+                    }
+                    else if (whiteHasStarted) break;
+                }
+                if (whiteHasStarted && whiteCounter > 2) whiteStartPos = new int[] { 0, (whiteCounter / 2 + whiteStartPos[1]) };
+
+                // Finding end position.
+                whiteCounter = 0;
+                whiteHasStarted = false;
+                int x = width - 1;
+
+                for (int y = 0; y < height; y++)
+                {
+                    if (getColor(x, y) == 1)
+                    {
+                        if (!whiteHasStarted)
+                        {
+                            whiteEndPos[0] = x;
+                            whiteEndPos[1] = y;
+                        }
+                        array[x, y] = 1;
+                        whiteCounter++;
+                        whiteHasStarted = true;
+                    }
+                    else if (whiteHasStarted) break;
+                }
+                if (whiteHasStarted && whiteCounter > 2) whiteEndPos = new int[] { x, (whiteCounter / 2 + whiteEndPos[1]) };
+            }
+            else
+            {
+                // Finding start position.
+                for (int x = 0; x < width; x++)
+                {
+                    if (getColor(x, 0) == 1)
+                    {
+                        if (!whiteHasStarted) whiteStartPos[0] = x;
+                        array[x, 0] = 1;
+                        whiteCounter++;
+                        whiteHasStarted = true;
+                    }
+                    else if (whiteHasStarted) break;
+                }
+                if (whiteHasStarted && whiteCounter > 2) whiteStartPos = new int[] { (whiteCounter / 2 + whiteStartPos[0]), 0 };
+
+                // Finding end position.
+                whiteCounter = 0;
+                whiteHasStarted = false;
+                int y = height - 1;
+                for (int x = 0; x < width; x++)
+                {
+                    if (getColor(x, y) == 1)
+                    {
+                        if (!whiteHasStarted)
+                        {
+                            whiteEndPos[0] = x;
+                            whiteEndPos[1] = y;
+                        }
+                        array[x, y] = 1;
+                        whiteCounter++;
+                        whiteHasStarted = true;
+                    }
+                    else if (whiteHasStarted) break;
+                }
+
+                if (whiteHasStarted && whiteCounter > 2) whiteEndPos = new int[] { (whiteCounter / 2 + whiteEndPos[0]), y };
             }
 
-            // Adding node under.
+            return new int[][] { whiteStartPos, whiteEndPos };
+        }
 
+        private int getColor(int x, int y)
+        {
+            /*
+             * 0 = black
+             * 1 = white
+             */
+            Color color = maze.GetPixel(x, y);
+            if (color.R < 10 && color.G < 10 && color.B < 10) return 0;
+            else return 1;
+        }
 
-            // Adding node right
+        private bool addNodesAround(int[] pos)
+        {
+            try
+            {
+                int x = pos[0];
+                int y = pos[1];
 
+                // Adding node over.
+                if (y > 0)
+                {
+                    if (array[x, y - 1] == 0 && getColor(x, y - 1) == 1)
+                    {
+                        nodes.Add(new int[] { x, y - 1 });
+                        array[x, y - 1] = 2;
+                    }
+                }
 
-            // Adding node left.
+                // Adding node under.
+                if (y < height)
+                {
+                    if (array[x, y + 1] == 0 && getColor(x, y + 1) == 1)
+                    {
+                        nodes.Add(new int[] { x, y + 1 });
+                        array[x, y + 1] = 1;
+                    }
+                }
+
+                // Adding node left
+                if (x > 0)
+                {
+                    if (array[x - 1, y] == 0 && getColor(x - 1, y) == 1)
+                    {
+                        nodes.Add(new int[] { x - 1, y });
+                        array[x - 1, y] = 4;
+                    }
+                }
+
+                // Adding node right.
+                if (x < width)
+                {
+                    if (array[x + 1, y] == 0 && getColor(x + 1, y) == 1)
+                    {
+                        nodes.Add(new int[] { x + 1, y });
+                        array[x + 1, y] = 3;
+                    }
+                }
+            }
+            catch (Exception)
+            {
+                MessageBox.Show("Error adding nodes around.", "Error");
+                return false;
+            }
+            return true;
         }
     }
 }
