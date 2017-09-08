@@ -18,7 +18,6 @@ namespace MazeRunner_v2._0
             InitializeComponent();
         }
         
-
         private void btn_load_Click(object sender, EventArgs e)
         {
             OpenFileDialog openFileDialog = new OpenFileDialog();
@@ -39,11 +38,7 @@ namespace MazeRunner_v2._0
                 if (succeeded)
                 {
                     pictureBox.Image = maze;
-                    if (width >= height)
-                    {
-                        //pictureBox.Scale(pictureBox.Size.Width / width);
-                        Scale(pictureBox.Size.Width / width);
-                    }
+                    
                     startPos = findOpeningOnSide(1, new int[] { 0, 0 });
                     if (startPos == new int[] { 0, 0 })
                     {
