@@ -112,5 +112,11 @@
   <ItemGroup>
     <None Include="Resources\tiny_maze.png" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\simple_tiny_maze_1.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\simple_tiny_maze_2.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

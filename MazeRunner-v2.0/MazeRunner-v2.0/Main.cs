@@ -84,26 +84,43 @@ namespace MazeRunner_v2._0
 
         private void btn_solve_Click(object sender, EventArgs e)
         {
-            if (startPos != new int[] { 0, 0 })
+            nodes.Clear();
+            if (startPos != new int[] { 0, 0 } && endPos != new int[] { 0, 0 })
             {
                 if (!addNodesAround(startPos)) return;
                 int i = 0;
+                int[] test = { 0, 0 };
                 while (true)
                 {
+                    if (i < nodes.Count)
+                    {
+                        test = nodes[i] as int[];
+                        if (test[0] == endPos[0] && test[1] == endPos[1])
+                        {
+                            MessageBox.Show("Maze solved!");
+                            break;
+                        }
+                    }
+                    else
+                    {
+                        MessageBox.Show("i = nodes.Count", "Error");
+                        break;
+                    }
+
                     try
                     {
-                        if (!addNodesAround(nodes[i] as int[])) return;
+                        if (i < nodes.Count)
+                        {
+                            if (!addNodesAround(nodes[i] as int[]))
+                            {
+                                return;
+                            }
+                        }
                     }
                     catch (Exception)
                     {
                         MessageBox.Show("Arraylist - out of range.", "Error");
                         return;
-                    }
-
-                    if ((nodes as ArrayList)[i] == endPos)
-                    {
-                        MessageBox.Show("Maze solved!");
-                        break;
                     }
                     i++;
                 }
@@ -155,7 +172,7 @@ namespace MazeRunner_v2._0
                     if (getColor(0, y) == 1)
                     {
                         if (!whiteHasStarted) whiteStartPos[1] = y;
-                        array[0, y] = 1;
+                        array[0, y] = 5;
                         whiteCounter++;
                         whiteHasStarted = true;
                     }
@@ -177,7 +194,7 @@ namespace MazeRunner_v2._0
                             whiteEndPos[0] = x;
                             whiteEndPos[1] = y;
                         }
-                        array[x, y] = 1;
+                        array[x, y] = 6;
                         whiteCounter++;
                         whiteHasStarted = true;
                     }
@@ -193,7 +210,7 @@ namespace MazeRunner_v2._0
                     if (getColor(x, 0) == 1)
                     {
                         if (!whiteHasStarted) whiteStartPos[0] = x;
-                        array[x, 0] = 1;
+                        array[x, 0] = 5;
                         whiteCounter++;
                         whiteHasStarted = true;
                     }
@@ -214,7 +231,7 @@ namespace MazeRunner_v2._0
                             whiteEndPos[0] = x;
                             whiteEndPos[1] = y;
                         }
-                        array[x, y] = 1;
+                        array[x, y] = 6;
                         whiteCounter++;
                         whiteHasStarted = true;
                     }
@@ -236,6 +253,25 @@ namespace MazeRunner_v2._0
             Color color = maze.GetPixel(x, y);
             if (color.R < 10 && color.G < 10 && color.B < 10) return 0;
             else return 1;
+        }
+
+        private void setColor(int x, int y, int _color)
+        {
+            //Color color;
+
+            //if (_color == 1) color = { 255, 255, 255
+
+ 
+            //maze.SetPixel(x, y, color);
+        }
+
+        private void drawPath()
+        {
+            int x = endPos[0];
+            int y = endPos[1];
+
+
+
         }
 
         private bool addNodesAround(int[] pos)
@@ -278,7 +314,7 @@ namespace MazeRunner_v2._0
                 // Adding node right.
                 if (x < width)
                 {
-                    if (array[x + 1, y] == 0 && getColor(x + 1, y) == 1)
+                    if ((array[x + 1, y] == 0 || array[x + 1, y] == 5 || array[x + 1, y] == 6) && getColor(x + 1, y) == 1)
                     {
                         nodes.Add(new int[] { x + 1, y });
                         array[x + 1, y] = 3;
