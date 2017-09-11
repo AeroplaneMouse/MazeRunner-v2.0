@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Drawing;
+using System.Diagnostics;
 using System.Collections;
 using System.Windows.Forms;
 
@@ -17,14 +18,14 @@ namespace MazeRunner_v2._0
          */
 
 
-        private int[,] array = new int[20, 20];
+        private int[,] array = new int[10000, 10000];
         private int width = 0;
         private int height = 0;
         private Bitmap maze;
         private int[] startPos = { 0, 0 };
         private int[] endPos = { 0, 0 };
-        private byte orientation = 0;
         private ArrayList nodes = new ArrayList();
+        private OpenFileDialog openFileDialog;
 
         public Main()
         {
@@ -34,7 +35,7 @@ namespace MazeRunner_v2._0
 
         private void btn_load_Click(object sender, EventArgs e)
         {
-            OpenFileDialog openFileDialog = new OpenFileDialog();
+            openFileDialog = new OpenFileDialog();
             if (openFileDialog.ShowDialog() == DialogResult.OK)
             {
                 bool succeeded = true;
@@ -67,17 +68,9 @@ namespace MazeRunner_v2._0
                             MessageBox.Show("Could not find start and end!", "Error");
                             return;
                         }
-                        else
-                        {
-                            orientation = 0;
-                            MessageBox.Show("Maze loaded correctly.");
-                        }
+                        else MessageBox.Show("Maze loaded correctly.");
                     }
-                    else
-                    {
-                        orientation = 1;
-                        MessageBox.Show("Maze loaded correctly.");
-                    }
+                    else MessageBox.Show("Maze loaded correctly.");
                 }
             }
         }
@@ -85,8 +78,11 @@ namespace MazeRunner_v2._0
         private void btn_solve_Click(object sender, EventArgs e)
         {
             nodes.Clear();
+
             if (startPos != new int[] { 0, 0 } && endPos != new int[] { 0, 0 })
             {
+                Stopwatch stopwatch = new Stopwatch();
+                stopwatch.Start();
                 if (!addNodesAround(startPos)) return;
                 int i = 0;
                 int[] test = { 0, 0 };
@@ -97,6 +93,7 @@ namespace MazeRunner_v2._0
                         test = nodes[i] as int[];
                         if (test[0] == endPos[0] && test[1] == endPos[1])
                         {
+                            stopwatch.Stop();
                             MessageBox.Show("Maze solved!");
                             break;
                         }
@@ -104,43 +101,45 @@ namespace MazeRunner_v2._0
                     else
                     {
                         MessageBox.Show("i = nodes.Count", "Error");
-                        break;
+                        stopwatch.Stop();
+                        return;
                     }
 
                     try
                     {
-                        if (i < nodes.Count)
+                        if (!addNodesAround(nodes[i] as int[]))
                         {
-                            if (!addNodesAround(nodes[i] as int[]))
-                            {
-                                return;
-                            }
+                            stopwatch.Stop();
+                            return;
                         }
                     }
                     catch (Exception)
                     {
+                        stopwatch.Stop();
                         MessageBox.Show("Arraylist - out of range.", "Error");
                         return;
                     }
                     i++;
                 }
+
+                drawPath();
+                string filePath_raw = openFileDialog.FileName;
+                string[] filePath_splited = filePath_raw.Split('.');
+                string newFilePath = "";
+                for (i = 0; i < filePath_splited.Length-2; i++)
+                {
+                    newFilePath += filePath_splited[i] + ".";
+                }
+                newFilePath += filePath_splited[filePath_splited.Length - 2] + "_solved." + filePath_splited[filePath_splited.Length - 1];
+                maze.Save(newFilePath);
+                pictureBox.Image = maze;
+                MessageBox.Show("It took: " + Convert.ToString(stopwatch.ElapsedMilliseconds) + " milliseconds.", "Time");
             }
             else
             {
                 MessageBox.Show("Invalid start position. (0,0)", "Error");
                 return;
             }
-
-
-
-
-
-            // Convert image to array
-            // Find shortest route
-            // Draw path to image
-            // Create new image with shortest path
-            // Message "Maze solved" 
-
         }
 
         private void btn_test_Click(object sender, EventArgs e)
@@ -150,7 +149,6 @@ namespace MazeRunner_v2._0
 
             txt_test.Text = Convert.ToString(getColor(x, y));
         }
-
 
         private int[][] findOpeningOnSides(int orientation)
         {
@@ -194,7 +192,7 @@ namespace MazeRunner_v2._0
                             whiteEndPos[0] = x;
                             whiteEndPos[1] = y;
                         }
-                        array[x, y] = 6;
+                        array[x, y] = 0;
                         whiteCounter++;
                         whiteHasStarted = true;
                     }
@@ -231,13 +229,12 @@ namespace MazeRunner_v2._0
                             whiteEndPos[0] = x;
                             whiteEndPos[1] = y;
                         }
-                        array[x, y] = 6;
+                        array[x, y] = 0;
                         whiteCounter++;
                         whiteHasStarted = true;
                     }
                     else if (whiteHasStarted) break;
                 }
-
                 if (whiteHasStarted && whiteCounter > 2) whiteEndPos = new int[] { (whiteCounter / 2 + whiteEndPos[0]), y };
             }
 
@@ -251,18 +248,14 @@ namespace MazeRunner_v2._0
              * 1 = white
              */
             Color color = maze.GetPixel(x, y);
-            if (color.R < 10 && color.G < 10 && color.B < 10) return 0;
+            if (color.R < 50 && color.G < 50 && color.B < 50) return 0;
             else return 1;
         }
 
-        private void setColor(int x, int y, int _color)
+        private void setColor(int x, int y, string _color)
         {
-            //Color color;
-
-            //if (_color == 1) color = { 255, 255, 255
-
- 
-            //maze.SetPixel(x, y, color);
+            Color color = Color.FromName(_color);
+            maze.SetPixel(x, y, color);
         }
 
         private void drawPath()
@@ -270,8 +263,17 @@ namespace MazeRunner_v2._0
             int x = endPos[0];
             int y = endPos[1];
 
+            while (true)
+            {
+                setColor(x, y, "Green");
 
-
+                if (array[x, y] == 1) y--;
+                else if (array[x, y] == 2) y++;
+                else if (array[x, y] == 3) x--;
+                else if (array[x, y] == 4) x++;
+                else if (array[x, y] == 5) break;
+            }
+            MessageBox.Show("Path has been drawn!");
         }
 
         private bool addNodesAround(int[] pos)
@@ -312,9 +314,9 @@ namespace MazeRunner_v2._0
                 }
 
                 // Adding node right.
-                if (x < width)
+                if (x < width - 1)
                 {
-                    if ((array[x + 1, y] == 0 || array[x + 1, y] == 5 || array[x + 1, y] == 6) && getColor(x + 1, y) == 1)
+                    if ((array[x + 1, y] == 0 || array[x + 1, y] == 5) && getColor(x + 1, y) == 1)
                     {
                         nodes.Add(new int[] { x + 1, y });
                         array[x + 1, y] = 3;
