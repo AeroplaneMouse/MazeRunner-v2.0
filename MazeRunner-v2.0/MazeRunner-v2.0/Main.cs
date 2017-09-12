@@ -18,7 +18,7 @@ namespace MazeRunner_v2._0
          */
 
 
-        private int[,] array = new int[10000, 10000];
+        private int[,] array = new int[15000, 15000];
         private int width = 0;
         private int height = 0;
         private Bitmap maze;
@@ -30,7 +30,6 @@ namespace MazeRunner_v2._0
         public Main()
         {
             InitializeComponent();
-            //nodes.Add(1);
         }
 
         private void btn_load_Click(object sender, EventArgs e)
@@ -41,7 +40,8 @@ namespace MazeRunner_v2._0
                 bool succeeded = true;
                 try
                 {
-                    maze = (Bitmap)Image.FromFile(openFileDialog.FileName);
+
+                    maze = new Bitmap((Bitmap)Image.FromFile(openFileDialog.FileName));
                     width = maze.Width;
                     height = maze.Height;
                 }
@@ -57,13 +57,13 @@ namespace MazeRunner_v2._0
                     startPos = openings[0];
                     endPos = openings[1];
 
-                    if (startPos == new int[] { 0, 0 })
+                    if ((startPos[0] == 0 && startPos[1] == 0))
                     {
                         openings = findOpeningOnSides(0);
                         startPos = openings[0];
                         endPos = openings[1];
 
-                        if (startPos == new int[] { 0, 0 })
+                        if (startPos[0] == 0 && startPos[1] == 0)
                         {
                             MessageBox.Show("Could not find start and end!", "Error");
                             return;
@@ -79,7 +79,7 @@ namespace MazeRunner_v2._0
         {
             nodes.Clear();
 
-            if (startPos != new int[] { 0, 0 } && endPos != new int[] { 0, 0 })
+            if ((startPos[0] != 0 && startPos[1] != 0) || (endPos[0] != 0 && endPos[1] != 0))
             {
                 Stopwatch stopwatch = new Stopwatch();
                 stopwatch.Start();
@@ -137,17 +137,17 @@ namespace MazeRunner_v2._0
             }
             else
             {
-                MessageBox.Show("Invalid start position. (0,0)", "Error");
+                MessageBox.Show("Invalid start position or end position. (0,0)", "Error");
                 return;
             }
         }
 
         private void btn_test_Click(object sender, EventArgs e)
         {
-            int x = Convert.ToInt32(txt_x.Text);
-            int y = Convert.ToInt32(txt_y.Text);
+            //int x = Convert.ToInt32(txt_x.Text);
+            //int y = Convert.ToInt32(txt_y.Text);
 
-            txt_test.Text = Convert.ToString(getColor(x, y));
+            //txt_test.Text = Convert.ToString(getColor(x, y));
         }
 
         private int[][] findOpeningOnSides(int orientation)
@@ -294,7 +294,7 @@ namespace MazeRunner_v2._0
                 }
 
                 // Adding node under.
-                if (y < height)
+                if (y < height - 1)
                 {
                     if (array[x, y + 1] == 0 && getColor(x, y + 1) == 1)
                     {
