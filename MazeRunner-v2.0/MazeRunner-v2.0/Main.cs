@@ -320,7 +320,7 @@ namespace MazeRunner_v2._0
             int x = endPos[0];
             int y = endPos[1];
             int[] pos = { x, y };
-
+            int counter = 0;
             while (true)
             {
                 pos[0] = x;
@@ -328,7 +328,7 @@ namespace MazeRunner_v2._0
                 if (slowMode)
                 {
                     backgroundWorker.ReportProgress(1, pos);
-                    Thread.Sleep(1);
+                    if (counter%2== 0) Thread.Sleep(1);
                 }
                 else setColor(maze, x, y, "Green");
 
@@ -434,10 +434,9 @@ namespace MazeRunner_v2._0
                         appendTextBox_log("Arraylist - out of range.");
                         return;
                     }
-                    Thread.Sleep(1);
+                    if (i%9 == 0) Thread.Sleep(1);
                     i++;
                 }
-                Thread.Sleep(10);
                 drawPath();
             }
             else
