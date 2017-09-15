@@ -330,6 +330,7 @@ namespace MazeRunner_v2._0
                     backgroundWorker.ReportProgress(1, pos);
                     Thread.Sleep(1);
                 }
+                else setColor(maze, x, y, "Green");
 
                 if (array[x, y] == 1) y--;
                 else if (array[x, y] == 2) y++;
