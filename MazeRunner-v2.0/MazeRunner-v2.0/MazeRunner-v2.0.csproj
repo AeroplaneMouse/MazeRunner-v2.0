@@ -142,5 +142,8 @@
   <ItemGroup>
     <None Include="Resources\close_icon.png" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\tiny_maze_solved.ico" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

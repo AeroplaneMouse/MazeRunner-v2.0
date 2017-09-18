@@ -28,15 +28,16 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Main));
             this.btn_load = new System.Windows.Forms.Button();
             this.btn_solve = new System.Windows.Forms.Button();
             this.progressBar = new System.Windows.Forms.ProgressBar();
             this.btn_slowMode = new System.Windows.Forms.Button();
             this.txt_log = new System.Windows.Forms.TextBox();
-            this.btn_closeForm = new System.Windows.Forms.Button();
-            this.pictureBox = new System.Windows.Forms.PictureBox();
             this.backgroundWorker = new System.ComponentModel.BackgroundWorker();
             this.btn_clearLog = new System.Windows.Forms.Button();
+            this.btn_closeForm = new System.Windows.Forms.Button();
+            this.pictureBox = new System.Windows.Forms.PictureBox();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox)).BeginInit();
             this.SuspendLayout();
             // 
@@ -105,6 +106,28 @@
             this.txt_log.Size = new System.Drawing.Size(376, 153);
             this.txt_log.TabIndex = 7;
             // 
+            // backgroundWorker
+            // 
+            this.backgroundWorker.WorkerReportsProgress = true;
+            this.backgroundWorker.DoWork += new System.ComponentModel.DoWorkEventHandler(this.DoWork);
+            this.backgroundWorker.ProgressChanged += new System.ComponentModel.ProgressChangedEventHandler(this.progressChanged);
+            this.backgroundWorker.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.workCompleted);
+            // 
+            // btn_clearLog
+            // 
+            this.btn_clearLog.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(52)))), ((int)(((byte)(52)))), ((int)(((byte)(52)))));
+            this.btn_clearLog.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(52)))), ((int)(((byte)(52)))), ((int)(((byte)(52)))));
+            this.btn_clearLog.FlatAppearance.BorderSize = 0;
+            this.btn_clearLog.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(70)))), ((int)(((byte)(70)))), ((int)(((byte)(70)))));
+            this.btn_clearLog.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btn_clearLog.Location = new System.Drawing.Point(256, 85);
+            this.btn_clearLog.Name = "btn_clearLog";
+            this.btn_clearLog.Size = new System.Drawing.Size(75, 77);
+            this.btn_clearLog.TabIndex = 9;
+            this.btn_clearLog.Text = "Clear log";
+            this.btn_clearLog.UseVisualStyleBackColor = false;
+            this.btn_clearLog.Click += new System.EventHandler(this.btn_clearLog_Click);
+            // 
             // btn_closeForm
             // 
             this.btn_closeForm.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(52)))), ((int)(((byte)(52)))), ((int)(((byte)(52)))));
@@ -130,28 +153,6 @@
             this.pictureBox.TabIndex = 5;
             this.pictureBox.TabStop = false;
             // 
-            // backgroundWorker
-            // 
-            this.backgroundWorker.WorkerReportsProgress = true;
-            this.backgroundWorker.DoWork += new System.ComponentModel.DoWorkEventHandler(this.DoWork);
-            this.backgroundWorker.ProgressChanged += new System.ComponentModel.ProgressChangedEventHandler(this.progressChanged);
-            this.backgroundWorker.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.workCompleted);
-            // 
-            // btn_clearLog
-            // 
-            this.btn_clearLog.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(52)))), ((int)(((byte)(52)))), ((int)(((byte)(52)))));
-            this.btn_clearLog.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(52)))), ((int)(((byte)(52)))), ((int)(((byte)(52)))));
-            this.btn_clearLog.FlatAppearance.BorderSize = 0;
-            this.btn_clearLog.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(70)))), ((int)(((byte)(70)))), ((int)(((byte)(70)))));
-            this.btn_clearLog.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btn_clearLog.Location = new System.Drawing.Point(256, 85);
-            this.btn_clearLog.Name = "btn_clearLog";
-            this.btn_clearLog.Size = new System.Drawing.Size(75, 77);
-            this.btn_clearLog.TabIndex = 9;
-            this.btn_clearLog.Text = "Clear log";
-            this.btn_clearLog.UseVisualStyleBackColor = false;
-            this.btn_clearLog.Click += new System.EventHandler(this.btn_clearLog_Click);
-            // 
             // Main
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
@@ -168,6 +169,7 @@
             this.Controls.Add(this.btn_load);
             this.ForeColor = System.Drawing.SystemColors.ButtonHighlight;
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "Main";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Maze Runner v2.0";
