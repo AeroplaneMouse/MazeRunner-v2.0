@@ -19,7 +19,7 @@ namespace MazeRunner_v2._0
          */
 
 
-        private int[,] array = new int[15001, 15001];
+        private int[,] array = new int[200, 200];
         private int width = 0;
         private int height = 0;
         private Bitmap maze;
@@ -36,7 +36,8 @@ namespace MazeRunner_v2._0
 
         private void onClosing(object sender, FormClosingEventArgs e)
         {
-            maze.Dispose();
+            if (maze != null)
+                maze.Dispose();
         }
 
         private void btn_closeForm_Click(object sender, EventArgs e)
