@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Drawing;
 using System.Diagnostics;
 using System.Collections;
@@ -34,12 +34,18 @@ namespace MazeRunner_v2._0
             InitializeComponent();
         }
 
+        /// <summary>
+        /// Dispose a loaded image opon closing
+        /// </summary>
         private void onClosing(object sender, FormClosingEventArgs e)
         {
             if (maze != null)
                 maze.Dispose();
         }
 
+        /// <summary>
+        /// Close the application
+        /// </summary>
         private void btn_closeForm_Click(object sender, EventArgs e)
         {
             this.Close();
