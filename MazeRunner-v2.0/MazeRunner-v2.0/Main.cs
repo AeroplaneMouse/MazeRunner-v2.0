@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Drawing;
 using System.Diagnostics;
 using System.Collections;
@@ -29,9 +29,13 @@ namespace MazeRunner_v2._0
         private OpenFileDialog openFileDialog;
         private bool slowMode = false;
 
+        private ILogger _logger;
+
+
         public Main()
         {
             InitializeComponent();
+            _logger = new TextBoxLogger(txt_log);
         }
 
         /// <summary>
