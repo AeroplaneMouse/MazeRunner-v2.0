@@ -70,7 +70,7 @@ namespace MazeRunner_v2._0
                 catch (Exception)
                 {
                     succeeded = false;
-                    updateLog("Error loading maze!");
+                    _logger.Log("Error loading maze!");
                 }
                 if (succeeded)
                 {
@@ -87,12 +87,14 @@ namespace MazeRunner_v2._0
 
                         if (startPos[0] == 0 && startPos[1] == 0)
                         {
-                            updateLog("Could not find start and end!");
+                            _logger.Log("Could not find start and end!");
                             return;
                         }
-                        else updateLog("Maze loaded correctly.");
+                        else 
+                            _logger.Log("Maze loaded correctly.");
                     }
-                    else updateLog("Maze loaded correctly.");
+                    else 
+                        _logger.Log("Maze loaded correctly.");
                 }
             }
         }
@@ -121,13 +123,13 @@ namespace MazeRunner_v2._0
                             if (test[0] == endPos[0] && test[1] == endPos[1])
                             {
                                 stopwatch.Stop();
-                                updateLog("Maze solved!");
+                                _logger.Log("Maze solved!");
                                 break;
                             }
                         }
                         else
                         {
-                            updateLog("i = nodes.Count");
+                            _logger.Log("i = nodes.Count");
                             noError = false;
                             break;
                         }
@@ -143,14 +145,14 @@ namespace MazeRunner_v2._0
                         catch (Exception)
                         {
                             noError = false;
-                            updateLog("Arraylist - out of range.");
+                            _logger.Log("Arraylist - out of range.");
                             break;
                         }
                         i++;
                     }
                     if (noError)
                     {
-                        updateLog("Nodes = " + nodes.Count);
+                        _logger.Log("Nodes = " + nodes.Count);
                         drawPath();
                         string filePath_raw = openFileDialog.FileName;
                         string[] filePath_splited = filePath_raw.Split('.');
@@ -165,7 +167,7 @@ namespace MazeRunner_v2._0
                         btn_load.Enabled = true;
                         btn_solve.Enabled = true;
                         btn_slowMode.Enabled = true;
-                        updateLog("It took: " + Convert.ToString(stopwatch.ElapsedMilliseconds) + " milliseconds.");
+                        _logger.Log("It took: " + Convert.ToString(stopwatch.ElapsedMilliseconds) + " milliseconds.");
                     }
                     else
                     {
@@ -174,7 +176,7 @@ namespace MazeRunner_v2._0
                 }
                 else
                 {
-                    updateLog("Invalid start position or end position. (0,0)");
+                    _logger.Log("Invalid start position or end position. (0,0)");
                     return;
                 }
             }
@@ -205,10 +207,8 @@ namespace MazeRunner_v2._0
 
         private void btn_clearLog_Click(object sender, EventArgs e)
         {
-            txt_log.Text = "";
+            _logger.Clear();    
         }
-
-
 
         private int[][] findOpeningOnSides(int orientation)
         {
@@ -477,33 +477,24 @@ namespace MazeRunner_v2._0
                 pictureBox.Image = maze;
             }
             else
-            {
-                updateLog("Error. Wrong progress value.");
-            }
+                _logger.Log("Error! Invalid progress value.");
         }
 
         private void appendTextBox_log(string value)
         {
-            if (InvokeRequired)
+            if (txt_log.InvokeRequired)
             {
                 this.Invoke(new Action<string>(appendTextBox_log), new object[] { value });
                 return;
             }
-            if (txt_log.Text == "") txt_log.Text = value + Environment.NewLine;
-            else txt_log.Text = value + Environment.NewLine + txt_log.Text;
-        }
-
-        private void updateLog(string value)
-        {
-            if (txt_log.Text == "") txt_log.Text = value + Environment.NewLine;
-            else txt_log.Text = value + Environment.NewLine + txt_log.Text;
+            _logger.Log(value);
         }
 
         private void workCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
             if (e.Error == null && !e.Cancelled)
             {
-                updateLog("Nodes = " + nodes.Count);
+                _logger.Log("Nodes = " + nodes.Count);
                 string filePath_raw = openFileDialog.FileName;
                 string[] filePath_splited = filePath_raw.Split('.');
                 string newFilePath = "";
@@ -519,9 +510,7 @@ namespace MazeRunner_v2._0
                 btn_slowMode.Enabled = true;
             }
             else
-            {
-                updateLog("Error. workCompleted()");
-            }
+                _logger.Log("Error! workCompleted()");
         }
     }
 }
